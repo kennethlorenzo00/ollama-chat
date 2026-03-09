@@ -1,0 +1,29 @@
+services:
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - ollama:/root/.ollama
+    # No ports exposed; only FastAPI talks to Ollama on the Docker network.
+    # For Nvidia GPU, uncomment below and install NVIDIA Container Toolkit on host:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    # For AMD GPU use: image: ollama/ollama:rocm and add:
+    #   device_ids: ["/dev/kfd", "/dev/dri"]
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BACKEND_URL=http://ollama:11434
+      - API_KEYS=${API_KEYS}
+    depends_on:
+      - ollama
+
+volumes:
+  ollama:

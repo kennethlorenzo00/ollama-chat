@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Claude-like theme: light #faf9f5, dark #262624. Default to light so vars are always defined. */
+:root,
+[data-theme="light"] {
+  --page-bg: #faf9f5;
+  --surface: #ffffff;
+  --surface-hover: #f5f4f0;
+  --border: #e8e6e3;
+  --border-hover: #d1cfc7;
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --sidebar-bg: #f5f4f0;
+  --sidebar-hover: #e8e6e3;
+  --input-bg: #ffffff;
+  --assistant-bubble: #ffffff;
+  --user-bubble: #e8e6e3;
+  --prose: #374151;
+  --prose-heading: #111827;
+  --scrollbar: #e5e7eb;
+  --scrollbar-hover: #d1d5db;
+}
+
+[data-theme="dark"] {
+  --page-bg: #262624;
+  --surface: #2d2d2b;
+  --surface-hover: #383836;
+  --border: #3d3d3b;
+  --border-hover: #4a4a48;
+  --text: #e8e8e6;
+  --text-muted: #a3a3a1;
+  --sidebar-bg: #1f1f1e;
+  --sidebar-hover: #2d2d2b;
+  --input-bg: #2d2d2b;
+  --assistant-bubble: #2d2d2b;
+  --user-bubble: #383836;
+  --prose: #d4d4d2;
+  --prose-heading: #e8e8e6;
+  --scrollbar: #3d3d3b;
+  --scrollbar-hover: #4a4a48;
+}
+
+body {
+  @apply antialiased;
+  color: var(--text);
+  background: var(--page-bg);
+}
+
+/* Theme-aware scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+/* Typing indicator: smooth wave bounce */
+@keyframes typing-dot {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-6px) scale(1.15); opacity: 1; }
+}
+
+.typing-dots span {
+  animation: typing-dot 0.6s ease-in-out infinite both;
+}
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-modal-in {
+  animation: modalIn 0.25s ease-out;
+}
+
+/* Markdown (prose) in assistant messages - theme-aware */
+.prose {
+  color: var(--prose);
+  line-height: 1.6;
+}
+.prose pre {
+  background-color: var(--surface-hover);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid var(--border);
+}
+.prose code {
+  background-color: var(--surface-hover);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  color: var(--prose);
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+.prose p { margin-bottom: 1rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+.prose ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+.prose li { margin-bottom: 0.25rem; }
+.prose strong { font-weight: 600; color: var(--prose-heading); }
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  color: var(--prose-heading);
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.prose h1 { font-size: 1.5rem; }
+.prose h2 { font-size: 1.25rem; }
+.prose h3 { font-size: 1.125rem; }
+.prose a { color: var(--text); text-decoration: underline; }
