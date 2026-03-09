@@ -15,15 +15,34 @@ services:
     # For AMD GPU use: image: ollama/ollama:rocm and add:
     #   device_ids: ["/dev/kfd", "/dev/dri"]
 
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ollama
+      POSTGRES_PASSWORD: ollama
+      POSTGRES_DB: ollama_chat
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ollama -d ollama_chat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   api:
     build: .
     ports:
       - "8000:8000"
     environment:
       - OLLAMA_BACKEND_URL=http://ollama:11434
-      - API_KEYS=${API_KEYS}
+      - DATABASE_URL=postgresql+asyncpg://ollama:ollama@postgres:5432/ollama_chat
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
     depends_on:
-      - ollama
+      ollama:
+        condition: service_started
+      postgres:
+        condition: service_healthy
 
 volumes:
   ollama:
+  postgres_data:

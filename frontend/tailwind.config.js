@@ -17,8 +17,8 @@ export default {
         'surface-warm': '#f7f6f3',
         user: '#e5e3df',
         assistant: '#ffffff',
-        accent: '#c45c26',
-        'accent-hover': '#a84d1f',
+        accent: '#FD7979',
+        'accent-hover': '#E86B6B',
       },
       boxShadow: {
         'message': '0 1px 2px rgba(0,0,0,0.04)',

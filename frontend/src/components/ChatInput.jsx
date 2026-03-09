@@ -29,7 +29,7 @@ export function ChatInput({ onSend, disabled }) {
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="flex items-end gap-2 min-h-[52px] bg-[var(--input-bg)] border border-[var(--border)] rounded-2xl pl-4 pr-2 py-2 shadow-sm hover:border-[var(--border-hover)] focus-within:ring-2 focus-within:ring-[var(--border)]/60 transition-all"
+        className="flex items-end gap-2 min-h-[52px] bg-[var(--input-bg)] border border-[var(--border)] rounded-2xl pl-4 pr-2 py-2 shadow-sm hover:border-[var(--border-hover)] focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/40 transition-all"
       >
         <textarea
           ref={textareaRef}

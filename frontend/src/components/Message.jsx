@@ -27,7 +27,7 @@ export function Message({ message, isThinking }) {
       <div className={`flex max-w-3xl w-full gap-3 items-center ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-            isUser ? 'bg-[var(--user-bubble)] text-[var(--text-muted)]' : 'bg-[#D97757] text-white'
+            isUser ? 'bg-[var(--user-bubble)] text-[var(--text-muted)]' : 'bg-[#FD7979] text-white'
           }`}
         >
           {isUser ? <User className="w-4 h-4" /> : <OllamaIcon className="w-4 h-4" />}

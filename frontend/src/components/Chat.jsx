@@ -4,7 +4,7 @@ import { Message } from './Message'
 import { ChatInput } from './ChatInput'
 import { OllamaIcon } from './OllamaIcon'
 
-export default function Chat({ conversation, model, onUpdate, apiKey }) {
+export default function Chat({ conversation, model, onUpdate, token, authHeaders }) {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState(null)
   const messagesEndRef = useRef(null)
@@ -13,6 +13,7 @@ export default function Chat({ conversation, model, onUpdate, apiKey }) {
   const messages = conv.messages || []
   const lastMsg = messages[messages.length - 1]
   const isThinking = sending && lastMsg?.role === 'assistant' && lastMsg?.content === '…'
+  const hasAuth = token || (authHeaders && authHeaders().Authorization)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -20,7 +21,7 @@ export default function Chat({ conversation, model, onUpdate, apiKey }) {
 
   const sendMessage = async (content) => {
     const text = (content || '').trim()
-    if (!text || sending || !apiKey) return
+    if (!text || sending || !hasAuth) return
 
     const nextMessages = [...messages, { role: 'user', content: text }]
     const title = conv.title === 'New chat' ? (text.slice(0, 36) + (text.length > 36 ? '…' : '')) : conv.title
@@ -32,13 +33,11 @@ export default function Chat({ conversation, model, onUpdate, apiKey }) {
     onUpdate({ ...conv, title, messages: [...nextMessages, placeholder] })
 
     try {
+      const h = authHeaders ? authHeaders() : {}
+      const headers = { 'Content-Type': 'application/json', ...h }
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + apiKey,
-          'X-API-Key': apiKey,
-        },
+        headers,
         body: JSON.stringify({
           model,
           messages: nextMessages.map(m => ({ role: m.role, content: m.content })),
@@ -77,7 +76,7 @@ export default function Chat({ conversation, model, onUpdate, apiKey }) {
               transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
               className="max-w-sm space-y-5"
             >
-              <div className="w-14 h-14 bg-[#D97757] rounded-2xl mx-auto flex items-center justify-center text-white shadow-md">
+              <div className="w-14 h-14 bg-[#FD7979] rounded-2xl mx-auto flex items-center justify-center text-white shadow-md">
                 <OllamaIcon className="w-8 h-8" />
               </div>
               <div className="space-y-1">
