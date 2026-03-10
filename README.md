@@ -42,17 +42,7 @@ Frontend: `cd frontend && npm install && npm run dev`.
 
    Use `--build` whenever you change the app or frontend so the image is rebuilt.
 
-   Then run migrations (one-time):
-
-   ```bash
-   docker compose exec api uv run alembic upgrade head
-   ```
-
-   If `uv` is not found in the container, use the venv directly:
-
-   ```bash
-   docker compose exec api /app/.venv/bin/alembic upgrade head
-   ```
+   Migrations run automatically when the `api` container starts. To run them manually (e.g. after attaching a new DB): `docker compose exec api uv run alembic upgrade head`
 
 3. **Pull the Qwen 2.5 model** (one-time). Replace `<ollama_container>` with the ollama service container name from `docker compose ps`:
 

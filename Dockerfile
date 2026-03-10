@@ -22,6 +22,8 @@ COPY app/ ./app/
 RUN test -d ./app/api && test -d ./app/api/routes || (echo "ERROR: app/api missing in build context" && exit 1)
 COPY alembic.ini .
 COPY alembic/ ./alembic/
+COPY scripts/docker-entrypoint.sh /app/scripts/docker-entrypoint.sh
+RUN chmod +x /app/scripts/docker-entrypoint.sh
 ENV PYTHONPATH=/app
 
 RUN mkdir -p ./app/static/chat-ui
@@ -29,4 +31,5 @@ COPY --from=frontend /frontend/dist/. ./app/static/chat-ui/
 
 EXPOSE 8000
 
+ENTRYPOINT ["/app/scripts/docker-entrypoint.sh"]
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
